@@ -1,14 +1,14 @@
 /**
  * SCENARIO 3: Scaling CPU-Bound Tasks Using Worker Threads
- * 
+ *
  * Architectural Background:
- * - A single-threaded Node.js server blocks its Event Loop when running CPU-heavy logic (e.g., encryption, 
+ * - A single-threaded Node.js server blocks its Event Loop when running CPU-heavy logic (e.g., encryption,
  *   heavy loops, image processing). During this time, the server cannot accept or respond to other HTTP requests.
  * - The `node:worker_threads` module allows spawning threads that run JavaScript code in parallel.
  * - Each Worker Thread has its own V8 engine isolate (independent call stack, garbage collector, and heap).
- * - Spawning a worker thread is lightweight (takes ~10-15MB of base RAM) compared to forks or child processes 
+ * - Spawning a worker thread is lightweight (takes ~10-15MB of base RAM) compared to forks or child processes
  *   (which duplicate the entire Node.js runtime process structure).
- * - Since they run in the same process, they share process resources, and communication via message passing 
+ * - Since they run in the same process, they share process resources, and communication via message passing
  *   (postMessage) or SharedArrayBuffer is extremely fast.
  */
 
@@ -24,8 +24,8 @@ const server = http.createServer((req, res) => {
   // 1. LIGHT ENDPOINT: Instantly responds to demonstrate event-loop non-blocking
   if (url.pathname === '/light') {
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.end(JSON.stringify({ 
-      status: 'OK', 
+    res.end(JSON.stringify({
+      status: 'OK',
       message: 'Instant response! The Event Loop is free and responsive.',
       timestamp: new Date().toISOString()
     }));
